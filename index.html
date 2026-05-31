@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%234A90E2'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-size='32' fill='white' font-family='Plus Jakarta Sans' dy='.3em'%3EAD%3C/text%3E%3C/svg%3E">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portofolio Jasa Desain Digital Premium - Modern Art Gallery Style">
+    <title>ArtDigital - Agensi Desain Premium</title>
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=stylesheet"
+        rel="stylesheet">
+
+    <!-- Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* =========================================
+        VARIABEL & TEMA
+        ========================================= */
+        :root {
+            /* Warna Latar Belakang */
+            --bg-body: transparent;
+            --bg-glass: rgba(255, 255, 255, 0.15);
+            /* Sangat Transparan (Ice Glass) */
+            --bg-glass-strong: rgba(255, 255, 255, 0.25);
+
+            /* Border & Shadows */
+            --border-glass: rgba(255, 255, 255, 0.3);
+            --border-input: rgba(255, 255, 255, 0.2);
+            --shadow-soft: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
+            --shadow-hover: 0 30px 60px -12px rgba(0, 0, 0, 0.7);
+
+            /* Teks */
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.9);
+            --text-light: rgba(255, 255, 255, 0.6);
+
+            /* Drop Shadow Teks (Agar Outline Kelihatan di Video Gelap) */
+            --text-glow-strong: 0 4px 15px rgba(0, 0, 0, 0.9);
+            --text-glow-normal: 0 2px 8px rgba(0, 0, 0, 0.8);
+
+            /* Aksen */
+            --color-accent: #ffffff;
+            --glass-blur: blur(30px);
+            --glass-radius: 24px;
+            --ease-fluid: cubic-bezier(0.25, 0.8, 0.25, 1);
+            --ease-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* =========================================
+        RESET & GLOBAL
+        ========================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: transparent;
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+            cursor: default;
+            text-shadow: var(--text-glow-normal);
+        }
+
+        /* Scrollbar Elegant (Transparent/White) */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        /* =========================================
+        VIDEO BACKGROUND & PARALLAX
+        ========================================= */
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -2;
+            filter: none !important;
+            opacity: 1;
+        }
+
+        .overlay-bg {
+            display: none;
+        }
+
+        /* =========================================
+        UTILITIES: GLASSMORPHISM
+        ========================================= */
+        .glass {
+            background: var(--bg-glass);
+            backdrop-filter: var(--glass-blur) !important;
+            -webkit-backdrop-filter: var(--glass-blur) !important;
+            border: 1px solid var(--border-glass);
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: var(--glass-radius);
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s var(--ease-fluid), box-shadow 0.4s ease, background 0.3s ease;
+        }
+
+        .glass:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            background: var(--bg-glass-strong);
+        }
+
+        /* =========================================
+        CUSTOM CURSOR (ENHANCED ANIMATION)
+        ========================================= */
+        .cursor-dot,
+        .cursor-circle {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.3s, height 0.3s, background-color 0.3s, transform 0.1s;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ffffff;
+        }
+
+        .cursor-circle {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* Logic Animasi Geser ke Navbar/Link */
+        body a:hover~.cursor-circle,
+        body button:hover~.cursor-circle,
+        .gallery-item:hover~.cursor-circle,
+        input:hover~.cursor-circle,
+        .hamburger-circle:hover~.cursor-circle,
+        .navbar-logo:hover~.cursor-circle,
+        .sneakpeek-item:hover~.cursor-circle {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.2);
+            /* Jadi terang/glassy */
+            border-color: transparent;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        /* Animasi Klik (Active State) */
+        .cursor-click {
+            transform: translate(-50%, -50%) scale(0.8) !important;
+            background-color: rgba(255, 255, 255, 0.8) !important;
+            border-color: transparent !important;
+            width: 30px !important;
+            height: 30px !important;
+        }
+
+        /* =========================================
+        LAYOUT UTAMA (FULL WIDTH MODE)
+        ========================================= */
+        .app-container {
+            display: block;
+            /* Bukan flex lagi */
+            min-height: 100vh;
+            position: relative;
+            background: transparent !important;
+            transition: padding-top 0.5s ease;
+            /* Transisi halus saat scroll */
+        }
+
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: #ffffff;
+            width: 0%;
+            z-index: 10001;
+            /* Di atas navbar */
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* =========================================
+        NAVBAR (LIQUID GLASS & PARALLAX)
+        ========================================= */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            /* Tinggi awal */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            z-index: 10000;
+
+            /* Liquid Glass Base */
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Efek Parallax saat Scroll (Menyusut) */
+        .navbar.scrolled {
+            height: 70px;
+            background: rgba(255, 255, 255, 0.15);
+            /* Sedikit lebih opaque */
+            backdrop-filter: blur(30px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 0 4%;
+        }
+
+        .navbar-container {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .navbar-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-decoration: none;
+            text-shadow: var(--text-glow-strong);
+            z-index: 10002;
+            transition: transform 0.2s var(--ease-bounce);
+        }
+
+        .navbar-logo:active {
+            transform: scale(0.9);
+        }
+
+        /* Desktop Links */
+        .nav-links-desktop {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease, transform 0.2s ease;
+            text-shadow: var(--text-glow-normal);
+        }
+
+        .nav-link:active {
+            transform: scale(0.95);
+        }
+
+        /* Liquid Underline Effect */
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: #ffffff;
+            border-radius: 2px;
+            transition: width 0.4s var(--ease-bounce);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .nav-link:hover {
+            color: #ffffff;
+            text-shadow: var(--text-glow-strong);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.highlight {
+            color: var(--color-accent);
+        }
+
+        /* =========================================
+        HAMBURGER & MOBILE OVERLAY
+        ========================================= */
+        .hamburger-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10002;
+            position: relative;
+            transition: all 0.3s var(--ease-bounce);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hamburger-circle:active {
+            transform: scale(0.9);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .hamburger-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 20px;
+        }
+
+        .hamburger-icon span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: #fff;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-circle.active .hamburger-icon span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger-circle.active .hamburger-icon span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-circle.active .hamburger-icon span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            z-index: 10001;
+            clip-path: circle(0% at 90% 40px);
+            transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu-overlay.active {
+            clip-path: circle(150% at 90% 40px);
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            text-align: center;
+        }
+
+        .mobile-link {
+            display: block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            margin: 1.5rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            text-shadow: var(--text-glow-normal);
+        }
+
+        .mobile-link.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* =========================================
+        CONTENT AREA (FULL WIDTH)
+        ========================================= */
+        .main-content {
+            margin-left: 0 !important;
+            /* Full Width */
+            padding-top: 100px;
+            /* Kompensasi navbar */
+            width: 100%;
+            position: relative;
+            background: transparent !important;
+        }
+
+        section {
+            /* Kompromi: Gunakan padding standar agar konsisten */
+            padding: 6rem 0;
+            position: relative;
+            background: transparent !important;
+        }
+
+        .container-standard {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* =========================================
+        TYPOGRAPHY (DROP SHADOW)
+        ========================================= */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: var(--text-main);
+            text-shadow: var(--text-glow-strong) !important;
+        }
+
+        p,
+        span,
+        a,
+        li,
+        div,
+        label,
+        small {
+            color: var(--text-main);
+            text-shadow: var(--text-glow-normal) !important;
+        }
+
+        .section-tag {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            color: #fff !important;
+            text-shadow: var(--text-glow-normal) !important;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: #fff !important;
+            text-shadow: var(--text-glow-strong) !important;
+            text-align: center;
+        }
+
+        /* =========================================
+        HERO SECTION
+        ========================================= */
+        #hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 0;
+            position: relative;
+            margin-top: -100px;
+            /* Kompensasi padding top agar full screen */
+            padding-top: 0;
+        }
+
+        #hero-glass {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 4rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            box-shadow: var(--shadow-soft);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            /* Disamakan dengan request index */
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            color: #ffffff !important;
+            text-shadow: var(--text-glow-strong) !important;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: var(--text-glow-normal) !important;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s var(--ease-fluid);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: #ffffff;
+            color: #000000 !important;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            text-shadow: none !important;
+            transition: transform 0.2s var(--ease-bounce);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+            text-shadow: var(--text-glow-normal) !important;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #ffffff;
+            text-shadow: var(--text-glow-strong) !important;
+        }
+
+        /* =========================================
+        SNEAKPEEK SECTION (GRID KECIL - CONSISTENT SIZE)
+        ========================================= */
+        #sneakpeek {
+            padding: 5rem 0 6rem 0;
+            /* Disesuaikan agar konsisten */
+        }
+
+        /* SNEAKPEEK GRID FIX: Diperbesar agar konsisten dengan ukuran layar */
+        .sneakpeek-grid {
+            display: grid;
+            /* Diubah dari 180px ke 240px agar tidak terlalu kecil/jauh beda */
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+            /* Jarak antar item */
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .sneakpeek-item {
+            position: relative;
+            border-radius: 16px;
+            /* Sudut lebih membulat */
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.4s var(--ease-fluid), border-color 0.3s ease;
+            aspect-ratio: 1/1;
+            /* Kotak Sempurna */
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .sneakpeek-item.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .sneakpeek-item:hover {
+            transform: scale(1.05) translateY(-5px);
+            z-index: 10;
+            border-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .sneakpeek-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sneakpeek-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sneakpeek-item:hover .sneakpeek-overlay {
+            opacity: 1;
+        }
+
+        .view-all-container {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        /* =========================================
+        SERVICES SECTION (FIX ICONS & SIZES)
+        ========================================= */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            /* Ukuran konsisten */
+            gap: 2rem;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            padding: 3rem 2rem;
+            /* Padding lebih lega */
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: center;
+            /* Pastikan semua kartu tingginya sama */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            /* Ukuran Icon */
+            margin-bottom: 0.5rem;
+            /* FIX ICONS: Paksa putih + Glow, hapus background transparan */
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            -webkit-text-fill-color: #ffffff !important;
+            color: #ffffff;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+            /* Efek bersinar */
+            transition: transform 0.3s ease;
+        }
+
+        /* Animasi icon saat hover */
+        .service-card:hover .service-icon {
+            transform: scale(1.1) rotate(5deg);
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 1));
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: var(--text-glow-strong) !important;
+        }
+
+        .service-desc {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            text-shadow: var(--text-glow-normal) !important;
+        }
+
+        /* =========================================
+        LIGHTBOX / PREVIEW
+        ========================================= */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 10003;
+            /* Pastikan di atas semua */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s var(--ease-fluid);
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lightbox-content-wrapper {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            transform: scale(0.9);
+            transition: transform 0.4s var(--ease-bounce);
+        }
+
+        .lightbox.active .lightbox-content-wrapper {
+            transform: scale(1);
+        }
+
+        .lightbox-img {
+            display: block;
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+            z-index: 10004;
+        }
+
+        .lightbox-close:hover {
+            color: var(--color-accent);
+            transform: rotate(90deg);
+        }
+
+        /* =========================================
+        ANIMATIONS & TOAST
+        ========================================= */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s var(--ease-fluid);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.5s var(--ease-fluid);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff !important;
+            backdrop-filter: blur(10px);
+            text-shadow: var(--text-glow-normal) !important;
+        }
+
+        .toast.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast i {
+            color: #10b981;
+            font-size: 1.2rem;
+        }
+
+        /* =========================================
+        RESPONSIVE
+        ========================================= */
+        @media (max-width: 1024px) {
+            section {
+                padding: 4rem 0;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links-desktop {
+                display: none;
+            }
+
+            .hamburger-circle {
+                display: flex;
+            }
+
+            .main-content {
+                padding-top: 70px;
+            }
+
+            .navbar {
+                padding: 0 1.5rem;
+                height: 70px;
+            }
+
+            .navbar.scrolled {
+                height: 60px;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            #hero-glass {
+                padding: 2.5rem;
+                margin: 1rem;
+                border-radius: 24px;
+            }
+
+            /* Mobile sneakpeek grid lebih besar agar terlihat */
+            .sneakpeek-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .cta-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .sneakpeek-grid {
+                grid-template-columns: 1fr;
+                /* Stack di layar sangat kecil */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress"></div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="notification"
+        style="display:none; position: fixed; bottom: 20px; right: 20px; background: rgba(0,0,0,0.8); color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 10005; backdrop-filter: blur(10px);">
+        <i class="fas fa-check-circle"></i>
+        <span>Pesan berhasil dikirim!</span>
+    </div>
+
+    <!-- =========================================
+         NAVBAR
+         ========================================= -->
+    <nav class="navbar glass" id="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">Rijal.order</a>
+
+            <ul class="nav-links-desktop">
+                <li><a href="#hero" class="nav-link">Beranda</a></li>
+                <li><a href="#sneakpeek" class="nav-link">Sneakpeek</a></li>
+                <li><a href="#services" class="nav-link">Layanan</a></li>
+                <li><a href="desain.html" class="nav-link highlight">Desain</a></li>
+                <li><a href="order.html" class="nav-link highlight">Buat Order</a></li>
+            </ul>
+
+            <div class="hamburger-circle" id="hamburger-trigger">
+                <div class="hamburger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobile-menu">
+        <div class="mobile-menu-content">
+            <ul class="mobile-nav-links">
+                <li><a href="#hero" class="mobile-link">Beranda</a></li>
+                <li><a href="#sneakpeek" class="mobile-link">Sneakpeek</a></li>
+                <li><a href="#services" class="mobile-link">Layanan</a></li>
+                <li><a href="desain.html" class="mobile-link">Desain</a></li>
+                <li><a href="order.html" class="mobile-link highlight">Buat Order</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- HERO SECTION -->
+        <section id="hero">
+            <div class="hero-container">
+                <!-- Video Background -->
+                <video class="video-bg" autoplay muted loop playsinline poster="2.mp4">
+                    <source src="2.mp4" type="video/mp4">
+                    Browser Anda tidak mendukung video tag.
+                </video>
+
+                <div class="hero-content" id="hero-glass">
+                    <h1 class="hero-title">Order Rijal <br>Visual Digital</h1>
+                    <p class="hero-subtitle">Desain.Edit.Mabar.Belajar.</p>
+                    <div class="cta-group">
+                        <a href="desain.html" class="btn btn-primary">Lihat Desain</a>
+                        <a href="order.html" class="btn btn-secondary">Buat Order</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SNEAKPEEK SECTION (BARU) -->
+        <section id="sneakpeek">
+            <div class="container-standard reveal">
+                <h2 class="section-title">Sneakpeek Karya</h2>
+            </div>
+
+            <!-- Grid Kecil (Sudah disesuaikan ukurannya) -->
+            <div class="sneakpeek-grid">
+                <!-- Item 1 -->
+                <div class="sneakpeek-item reveal" onclick="openLightbox('design/11.png')">
+                    <img src="design/11.png" alt="Design 1" class="sneakpeek-img" loading="lazy">
+                    <div class="sneakpeek-overlay"><i class="fas fa-search-plus"
+                            style="color:white; font-size: 1.5rem;"></i></div>
+                </div>
+                <!-- Item 2 -->
+                <div class="sneakpeek-item reveal" onclick="openLightbox('design/15.png')">
+                    <img src="design/15.png" alt="Design 2" class="sneakpeek-img" loading="lazy">
+                    <div class="sneakpeek-overlay"><i class="fas fa-search-plus"
+                            style="color:white; font-size: 1.5rem;"></i></div>
+                </div>
+                <!-- Item 3 -->
+                <div class="sneakpeek-item reveal" onclick="openLightbox('design/18.png')">
+                    <img src="design/18.png" alt="Design 3" class="sneakpeek-img" loading="lazy">
+                    <div class="sneakpeek-overlay"><i class="fas fa-search-plus"
+                            style="color:white; font-size: 1.5rem;"></i></div>
+                </div>
+                <!-- Item 4 -->
+                <div class="sneakpeek-item reveal" onclick="openLightbox('design/20.png')">
+                    <img src="design/20.png" alt="Design 4" class="sneakpeek-img" loading="lazy">
+                    <div class="sneakpeek-overlay"><i class="fas fa-search-plus"
+                            style="color:white; font-size: 1.5rem;"></i></div>
+                </div>
+                <!-- Item 5 -->
+                <div class="sneakpeek-item reveal" onclick="openLightbox('design/25.png')">
+                    <img src="design/25.png" alt="Design 5" class="sneakpeek-img" loading="lazy">
+                    <div class="sneakpeek-overlay"><i class="fas fa-search-plus"
+                            style="color:white; font-size: 1.5rem;"></i></div>
+                </div>
+                <!-- Item 6 -->
+                <div class="sneakpeek-item reveal" onclick="openLightbox('design/28.png')">
+                    <img src="design/28.png" alt="Design 6" class="sneakpeek-img" loading="lazy">
+                    <div class="sneakpeek-overlay"><i class="fas fa-search-plus"
+                            style="color:white; font-size: 1.5rem;"></i></div>
+                </div>
+                <!-- Item 7 -->
+                <div class="sneakpeek-item reveal" onclick="openLightbox('design/TYPECUT.png')">
+                    <img src="design/TYPECUT.png" alt="Design 7" class="sneakpeek-img" loading="lazy">
+                    <div class="sneakpeek-overlay"><i class="fas fa-search-plus"
+                            style="color:white; font-size: 1.5rem;"></i></div>
+                </div>
+                <!-- Item 8 -->
+                <div class="sneakpeek-item reveal" onclick="openLightbox('spanduk/11.png')">
+                    <img src="spanduk/11.png" alt="Design 8" class="sneakpeek-img" loading="lazy">
+                    <div class="sneakpeek-overlay"><i class="fas fa-search-plus"
+                            style="color:white; font-size: 1.5rem;"></i></div>
+                </div>
+            </div>
+
+            <div class="view-all-container reveal">
+                <a href="desain.html" class="btn btn-secondary">Lihat Semua Karya</a>
+            </div>
+        </section>
+
+        <!-- SERVICES SECTION -->
+        <section id="services">
+            <div class="container-standard">
+                <div class="section-header reveal">
+                    <h2 class="section-title">Sedia jasa</h2>
+                </div>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card glass reveal">
+                    <div class="service-icon"><i class="fas fa-pen-nib"></i></div>
+                    <h3 class="service-title">Jasa Desain</h3>
+                    <p class="service-desc">Logo, Banner, Poster, UI Design.</p>
+                </div>
+                <div class="service-card glass reveal">
+                    <div class="service-icon"><i class="fas fa-file-powerpoint"></i></div>
+                    <h3 class="service-title">Buat PPT</h3>
+                    <p class="service-desc">Presentasi profesional untuk bisnis atau akademik.</p>
+                </div>
+                <div class="service-card glass reveal">
+                    <div class="service-icon"><i class="fas fa-video"></i></div>
+                    <h3 class="service-title">Edit Video</h3>
+                    <p class="service-desc">Editing konten video untuk social media dan landing page.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- HTML STRUKTUR LIGHTBOX -->
+    <div id="lightbox-modal" class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <div class="lightbox-content-wrapper">
+            <img class="lightbox-img" id="lightbox-img-target" src="" alt="Preview Full Size">
+        </div>
+    </div>
+
+    <!-- JavaScript Logika -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // 1. Logic Navbar Parallax & Sticky
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // 2. Logic Mobile Menu
+            const hamburger = document.getElementById('hamburger-trigger');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            hamburger.addEventListener('click', () => {
+                const isActive = mobileMenu.classList.contains('active');
+                if (!isActive) {
+                    mobileMenu.classList.add('active');
+                    hamburger.classList.add('active');
+                    mobileLinks.forEach((link, index) => {
+                        link.style.transitionDelay = `${index * 0.1}s`;
+                        link.classList.add('show');
+                    });
+                } else {
+                    mobileMenu.classList.remove('active');
+                    hamburger.classList.remove('active');
+                    mobileLinks.forEach(link => {
+                        link.style.transitionDelay = '0s';
+                        link.classList.remove('show');
+                    });
+                }
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                    hamburger.classList.remove('active');
+                    mobileLinks.forEach(l => { l.classList.remove('show'); l.style.transitionDelay = '0s'; });
+                });
+            });
+
+            // 3. Logic Klik pada Service Grid (Redirect)
+            const serviceCards = document.querySelectorAll('.services-grid .service-card');
+            serviceCards.forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', () => {
+                    window.location.href = 'desain.html';
+                });
+            });
+
+            // 4. Custom Cursor
+            const cursorDot = document.querySelector('.cursor-dot');
+            const cursorCircle = document.querySelector('.cursor-circle');
+
+            if (window.matchMedia("(pointer: fine)").matches) {
+                document.addEventListener('mousemove', (e) => {
+                    cursorDot.style.left = `${e.clientX}px`;
+                    cursorDot.style.top = `${e.clientY}px`;
+                    cursorCircle.animate({ left: `${e.clientX}px`, top: `${e.clientY}px` }, { duration: 500, fill: "forwards" });
+                });
+
+                const interactiveElements = document.querySelectorAll('a, button, .gallery-item, .service-card, .sneakpeek-item');
+                interactiveElements.forEach(el => {
+                    el.addEventListener('mouseenter', () => {
+                        cursorCircle.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                        cursorCircle.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                    });
+                    el.addEventListener('mouseleave', () => {
+                        cursorCircle.style.transform = 'translate(-50%, -50%) scale(1)';
+                        cursorCircle.style.backgroundColor = 'transparent';
+                    });
+                });
+            }
+
+            document.addEventListener('mousedown', () => { cursorCircle.classList.add('cursor-click'); });
+            document.addEventListener('mouseup', () => { cursorCircle.classList.remove('cursor-click'); });
+
+            // 5. Scroll Progress
+            window.addEventListener('scroll', () => {
+                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (scrollTop / scrollHeight) * 100;
+                document.getElementById('scroll-progress').style.width = scrolled + '%';
+            });
+
+            // 6. Scroll Reveal
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('active');
+                });
+            }, { threshold: 0.15 });
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // 7. Sneakpeek Items Animation Trigger
+            const sneakpeekItems = document.querySelectorAll('.sneakpeek-item');
+            sneakpeekItems.forEach((item, index) => {
+                // Staggered delay effect saat reveal
+                item.style.transitionDelay = `${index * 0.1}s`;
+            });
+        });
+
+        // 8. GLOBAL LIGHTBOX FUNCTIONS (Bisa dipanggil dari onclick HTML)
+        const lightboxModal = document.getElementById('lightbox-modal');
+        const lightboxImg = document.getElementById('lightbox-img-target');
+
+        function openLightbox(src) {
+            lightboxImg.src = src;
+            lightboxModal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Stop scroll
+        }
+
+        function closeLightbox() {
+            lightboxModal.classList.remove('active');
+            setTimeout(() => {
+                lightboxImg.src = '';
+            }, 400);
+            document.body.style.overflow = 'auto'; // Resume scroll
+        }
+
+        // Close lightbox on background click
+        lightboxModal.addEventListener('click', (e) => {
+            if (e.target === lightboxModal) {
+                closeLightbox();
+            }
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', (e) => {   
+            if (e.key === 'Escape' && lightboxModal.classList.contains('active')) {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+
+</html>

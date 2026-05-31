@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buat Pesanan - ArtDigital</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* =========================================
+        VARIABEL & TEMA
+        ========================================= */
+        :root {
+            --bg-body: transparent;
+            --bg-glass: rgba(255, 255, 255, 0.15);
+            --bg-glass-strong: rgba(255, 255, 255, 0.25);
+            --border-glass: rgba(255, 255, 255, 0.3);
+            --shadow-soft: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
+            --text-main: #ffffff;
+            --text-glow-normal: 0 2px 8px rgba(0, 0, 0, 0.8);
+            --text-glow-strong: 0 4px 15px rgba(0, 0, 0, 0.9);
+            --glass-blur: blur(30px);
+            --glass-radius: 24px;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --color-accent: #ffffff;
+        }
+
+        /* =========================================
+        RESET & GLOBAL
+        ========================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: transparent;
+            color: var(--text-main);
+            overflow-x: hidden;
+            cursor: default;
+            text-shadow: var(--text-glow-normal);
+        }
+
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -2;
+            filter: brightness(0.4) contrast(1.1);
+        }
+
+        .glass {
+            background: var(--bg-glass);
+            backdrop-filter: var(--glass-blur) !important;
+            -webkit-backdrop-filter: var(--glass-blur) !important;
+            border: 1px solid var(--border-glass);
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: var(--shadow-soft);
+        }
+
+        /* =========================================
+        NAVBAR
+        ========================================= */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            z-index: 10000;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s ease;
+        }
+
+        .navbar.scrolled {
+            height: 70px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px);
+        }
+
+        .navbar-container {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .navbar-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-decoration: none;
+            text-shadow: var(--text-glow-strong);
+        }
+
+        .nav-links-desktop {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover,
+        .nav-link.highlight {
+            color: #ffffff;
+            text-shadow: var(--text-glow-strong);
+        }
+
+        /* Mobile Nav */
+        .hamburger-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .hamburger-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 20px;
+        }
+
+        .hamburger-icon span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: #fff;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        .hamburger-circle.active .hamburger-icon span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger-circle.active .hamburger-icon span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-circle.active .hamburger-icon span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            z-index: 10001;
+            clip-path: circle(0% at 90% 40px);
+            transition: clip-path 0.8s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu-overlay.active {
+            clip-path: circle(150% at 90% 40px);
+        }
+
+        .mobile-link {
+            display: block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            margin: 1.5rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.4s;
+        }
+
+        .mobile-link.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* =========================================
+        STYLE KHUSUS HALAMAN ORDER
+        ========================================= */
+        #order-page {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 100px;
+            padding-bottom: 2rem;
+        }
+
+        .order-container {
+            width: 90%;
+            max-width: 650px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 2.5rem;
+            border-radius: var(--glass-radius);
+            color: #fff;
+        }
+
+        .order-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .order-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        .order-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .order-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: var(--text-glow-strong);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-tag {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .form-section-title {
+            color: var(--color-accent);
+            font-weight: 700;
+            margin-top: 1.8rem;
+            margin-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            padding-bottom: 0.3rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+            position: relative;
+        }
+
+        /* =========================================
+        FIX INPUT & SELECT STYLING
+        ========================================= */
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            /* Background gelap solid untuk kontras maksimal */
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            font-family: var(--font-main);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-color: #ffffff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Fix Dropdown Options (Agar background hitam & teks putih) */
+        option {
+            background-color: #121212;
+            /* Warna dasar item dropdown */
+            color: #ffffff;
+            padding: 10px;
+            border: none;
+        }
+
+        /* Hapus panah default browser yang seringkali jelek/ga kelihatan */
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
+            /* Tambah padding kanan agar teks tidak ketabrak icon */
+            padding-right: 3rem;
+        }
+
+        /* Wrapper untuk custom arrow */
+        .select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        /* Custom Arrow Icon */
+        .select-wrapper::after {
+            content: '\f107';
+            /* FontAwesome Chevron Down */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+            /* Klik tembus ke select */
+            font-size: 1rem;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Styling Tanggal (Date Picker) agar gelap */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+            text-shadow: var(--text-glow-normal);
+        }
+
+        /* Tombol */
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: #fff;
+            width: 100%;
+            margin-top: 1.5rem;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .error-msg {
+            color: #ff6b6b;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+            text-shadow: none;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: 0.5s;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .toast.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .cursor-dot,
+        .cursor-circle {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ffffff;
+        }
+
+        .cursor-circle {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links-desktop {
+                display: none;
+            }
+
+            .hamburger-circle {
+                display: flex;
+            }
+
+            #order-page {
+                padding-top: 80px;
+            }
+
+            .order-container {
+                padding: 1.5rem;
+                width: 95%;
+            }
+
+            .order-header h1 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Video Background -->
+    <video class="video-bg" autoplay muted loop playsinline>
+        <source src="2.mp4" type="video/mp4">
+        Browser Anda tidak mendukung video tag.
+    </video>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+
+    <!-- Toast Notifikasi -->
+    <div class="toast" id="notification">
+        <i class="fas fa-check-circle" style="color: #25D366;"></i>
+        <span>Mengalihkan ke WhatsApp...</span>
+    </div>
+
+    <!-- =========================================
+         NAVBAR (SAMA PERSIS)
+         ========================================= -->
+    <nav class="navbar glass" id="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">
+                Rijal.order
+            </a>
+
+            <ul class="nav-links-desktop">
+                <li><a href="index.html" class="nav-link">Beranda</a></li>
+                <li><a href="desain.html" class="nav-link">Desain</a></li>
+                <li><a href="order.html" class="nav-link highlight">Buat Order</a></li>
+            </ul>
+
+            <div class="hamburger-circle" id="hamburger-trigger">
+                <div class="hamburger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobile-menu">
+        <div class="mobile-menu-content">
+            <ul class="mobile-nav-links">
+                <li><a href="index.html" class="mobile-link">Beranda</a></li>
+                <li><a href="desain.html" class="mobile-link">Desain</a></li>
+                <li><a href="order.html" class="mobile-link highlight">Buat Order</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- =========================================
+         MAIN ORDER PAGE
+         ========================================= -->
+    <main class="main-content">
+        <section id="order-page">
+
+            <div class="glass order-container reveal">
+                <div class="order-header">
+                    <span class="section-tag">Formulir Pemesanan</span>
+                    <h1>Mulai Proyek Anda</h1>
+                    <p style="font-size: 0.9rem; color: rgba(255,255,255,0.8);">Isi detail di bawah ini, data akan
+                        otomatis terformat ke WhatsApp Admin.</p>
+                </div>
+
+                <form id="orderForm">
+
+                    <!-- IDENTITAS -->
+                    <div class="form-section-title"><i class="fas fa-user"></i> IDENTITAS</div>
+                    <div class="form-group">
+                        <input type="text" id="orderName" placeholder="Masukkan Nama Lengkap" required>
+                    </div>
+
+                    <!-- LAYANAN -->
+                    <div class="form-section-title"><i class="fas fa-briefcase"></i> LAYANAN</div>
+                    <div class="form-group">
+                        <!-- Wrapper select-wrapper ditambahkan untuk icon panah -->
+                        <div class="select-wrapper">
+                            <select id="orderService" required onchange="updateCategoryOptions()">
+                                <option value="" disabled selected>Pilih Jenis Layanan</option>
+                                <option value="Jasa Desain">Jasa Desain</option>
+                                <option value="Buat PPT">Buat PPT</option>
+                                <option value="Edit Video/Page">Edit Video/Page</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="select-wrapper">
+                            <select id="orderCategory" required disabled>
+                                <option value="" disabled selected>Pilih Kategori</option>
+                            </select>
+                        </div>
+                        <div id="categoryError" class="error-msg">Mohon pilih kategori terlebih dahulu.</div>
+                    </div>
+
+                    <!-- JADWAL -->
+                    <div class="form-section-title"><i class="fas fa-calendar-alt"></i> JADWAL Pengerjaan</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label
+                                style="font-size: 0.7rem; text-transform: uppercase; margin-bottom: 5px;">Mulai</label>
+                            <input type="date" id="startDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label
+                                style="font-size: 0.7rem; text-transform: uppercase; margin-bottom: 5px;">Deadline</label>
+                            <input type="date" id="endDate" required>
+                        </div>
+                    </div>
+                    <div id="dateError" class="error-msg" style="text-align: center;">Tanggal deadline tidak valid.
+                    </div>
+
+                    <!-- PENAWARAN -->
+                    <div class="form-section-title"><i class="fas fa-wallet"></i> ANGGARAN (Opsional)</div>
+                    <div class="form-group">
+                        <input type="number" id="offerPrice" placeholder="Contoh: Makasih mas" min="0">
+                    </div>
+
+                    <!-- CATATAN -->
+                    <div class="form-group">
+                        <textarea id="orderNotes" rows="4" placeholder="Jelaskan detail kebutuhan desain Anda..."
+                            required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fab fa-whatsapp"></i> Kirim Pesanan
+                    </button>
+                </form>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // 1. Navbar Logic
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) navbar.classList.add('scrolled');
+                else navbar.classList.remove('scrolled');
+            });
+
+            // 2. Mobile Menu Logic
+            const hamburger = document.getElementById('hamburger-trigger');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            hamburger.addEventListener('click', () => {
+                const isActive = mobileMenu.classList.contains('active');
+                if (!isActive) {
+                    mobileMenu.classList.add('active');
+                    hamburger.classList.add('active');
+                    mobileLinks.forEach((link, i) => {
+                        link.style.transitionDelay = `${i * 0.1}s`;
+                        link.classList.add('show');
+                    });
+                } else {
+                    mobileMenu.classList.remove('active');
+                    hamburger.classList.remove('active');
+                    mobileLinks.forEach(l => { l.classList.remove('show'); l.style.transitionDelay = '0s'; });
+                }
+            });
+
+            // 3. Reveal Animation
+            document.querySelector('.reveal').classList.add('active');
+
+            // 4. Custom Cursor
+            const cursorDot = document.querySelector('.cursor-dot');
+            const cursorCircle = document.querySelector('.cursor-circle');
+            if (window.matchMedia("(pointer: fine)").matches) {
+                document.addEventListener('mousemove', (e) => {
+                    cursorDot.style.left = `${e.clientX}px`;
+                    cursorDot.style.top = `${e.clientY}px`;
+                    cursorCircle.animate({ left: `${e.clientX}px`, top: `${e.clientY}px` }, { duration: 500, fill: "forwards" });
+                });
+            }
+        });
+
+        // ==========================================
+        // LOGIKA FORM & WHATSAPP
+        // ==========================================
+
+        // NOMOR ADMIN
+        const ADMIN_WA_NUMBER = "6289530025836";
+
+        // Data Kategori
+        const categoryData = {
+            "Jasa Desain": ["Logo Design", "Banner/Iklan", "Branding Kit", "Social Media Post", "Packaging"],
+            "Buat PPT": ["Presentasi Bisnis", "Presentasi Akademik", "Pitch Deck Investor"],
+            "Edit Video/Page": ["Edit Video Pendek (Reels)", "Edit Video Youtube", "Landing Page Copywriting"]
+        };
+
+        function updateCategoryOptions() {
+            const serviceSelect = document.getElementById('orderService');
+            const categorySelect = document.getElementById('orderCategory');
+            const selectedService = serviceSelect.value;
+
+            categorySelect.innerHTML = '<option value="" disabled selected>Pilih Kategori</option>';
+
+            if (selectedService && categoryData[selectedService]) {
+                categorySelect.disabled = false;
+                categoryData[selectedService].forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat;
+                    option.textContent = cat;
+                    categorySelect.appendChild(option);
+                });
+            } else {
+                categorySelect.disabled = true;
+            }
+        }
+
+        document.getElementById('orderForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById('orderName').value;
+            const service = document.getElementById('orderService').value;
+            const category = document.getElementById('orderCategory').value;
+            const start = document.getElementById('startDate').value;
+            const end = document.getElementById('endDate').value;
+            const offer = document.getElementById('offerPrice').value;
+            const notes = document.getElementById('orderNotes').value;
+
+            // Validasi Tanggal
+            if (new Date(end) < new Date(start)) {
+                document.getElementById('dateError').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('dateError').style.display = 'none';
+            }
+
+            const formattedOffer = offer ? `Rp ${parseInt(offer).toLocaleString('id-ID')}` : "Nego";
+
+            const message = `
+*PESANAN BARU DARI WEB*
+--------------------------------
+*Nama:* ${name}
+*Layanan:* ${service}
+*Kategori:* ${category}
+--------------------------------
+ *Mulai:* ${start}
+ *Deadline:* ${end}
+ *Penawaran:* ${formattedOffer}
+--------------------------------
+ *Detail:*
+ ${notes}
+
+_Mohon segera diproses, Terima kasih!_
+`.trim();
+
+            const encodedMessage = encodeURIComponent(message);
+            const btn = this.querySelector('button[type="submit"]');
+            const originalContent = btn.innerHTML;
+
+            // Efek Loading & Notifikasi
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            btn.style.opacity = '0.7';
+
+            document.getElementById('notification').classList.add('active');
+
+            setTimeout(() => {
+                window.open(`https://wa.me/${ADMIN_WA_NUMBER}?text=${encodedMessage}`, '_blank');
+                btn.innerHTML = originalContent;
+                btn.style.opacity = '1';
+                document.getElementById('notification').classList.remove('active');
+            }, 1500);
+        });
+    </script>
+</body>
+
+</html>
